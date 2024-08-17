@@ -14,7 +14,7 @@ export class PersonalTrainerRepository{
             id INT AUTO_INCREMENT PRIMARY KEY,
             name VARCHAR(255) NOT NULL,
             address VARCHAR(255) NOT NULL,
-            cell VARCHAR(255) NOT NULL
+            cell VARCHAR(255) NOT NULL UNIQUE
         )`;
 
         try {

@@ -5,16 +5,16 @@ export class Trainee {
     private _name: string;
     private _age: number;
     private _address: string;
-    private _cell: string;
+    private _cell: number;
     private _description: string;
   
-    constructor(id: number, name: string, age: number, address: string, cell: string, description: string) {
-      this._id = id;
+    constructor(name: string, age: number, cell: number, description?: string,  address?: string, id?: number) {
+      this._id = id || 0;
       this._name = name;
       this._age = age;
-      this._address = address;
+      this._address = address || '';
       this._cell = cell;
-      this._description = description;
+      this._description = description || '';
     }
   
     get id(): number {
@@ -49,11 +49,11 @@ export class Trainee {
       this._address = value;
     }
   
-    get cell(): string {
+    get cell(): number {
       return this._cell;
     }
   
-    set cell(value: string) {
+    set cell(value: number) {
       this._cell = value;
     }
   
