@@ -9,7 +9,7 @@ export class PersonalTrainerService {
         const personal = await this.dtoToPersonal((personalDTO));
 
         try{
-            this.verifyCell(personal.cell);
+            await this.verifyCell(personal.cell);
         } catch(err) {
             throw err;
         }
@@ -23,7 +23,7 @@ export class PersonalTrainerService {
 
         if(personal.cell != (await this.personalTrainerRepository.filterPersonalById(personal.id)).cell) {
             try{
-                this.verifyCell(personal.cell);
+                await this.verifyCell(personal.cell);
             } catch(err) {
                 throw err;
             }

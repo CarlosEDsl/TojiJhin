@@ -10,7 +10,7 @@ export class TraineeService {
         const trainee = await this.dtoToTrainee(traineeDTO);
 
         try{
-            this.verifyCell(trainee.cell);
+            await this.verifyCell(trainee.cell);
         } catch(err) {
             throw err;
         }
@@ -24,7 +24,7 @@ export class TraineeService {
 
         try {
             if(trainee.cell != (await this.traineeRepository.filterTraineeById(trainee.id)).cell)
-                this.verifyCell(trainee.cell);
+                await this.verifyCell(trainee.cell);
         } catch(err) {
             throw err;
         }
