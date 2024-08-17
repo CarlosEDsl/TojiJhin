@@ -4,10 +4,10 @@ export class PersonalTrainer {
     private _id: number;
     private _name: string;
     private _address: string;
-    private _cell: string;
+    private _cell: number;
   
-    constructor(id: number, name: string, address: string, cell: string) {
-      this._id = id;
+    constructor(name: string, address: string, cell: number, id?: number) {
+      this._id = id || 0;
       this._name = name;
       this._address = address;
       this._cell = cell;
@@ -37,11 +37,11 @@ export class PersonalTrainer {
       this._address = value;
     }
   
-    get cell(): string {
+    get cell(): number {
       return this._cell;
     }
   
-    set cell(value: string) {
+    set cell(value: number) {
       this._cell = value;
     }
   }

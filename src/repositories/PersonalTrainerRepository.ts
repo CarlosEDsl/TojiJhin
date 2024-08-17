@@ -2,7 +2,7 @@ import { executarComandoSQL } from "../databases/mysql";
 import { PersonalTrainer } from "../models/PersonalTrainer";
 
 
-export class ProductRepository{
+export class PersonalTrainerRepository{
 
     constructor(){
         this.createTable();
@@ -41,7 +41,7 @@ export class ProductRepository{
         }
     }
 
-    async updateProduct(personaltrainer:PersonalTrainer) :Promise<PersonalTrainer>{
+    async updatePersonal(personaltrainer:PersonalTrainer) :Promise<PersonalTrainer>{
         const query = "UPDATE tojiJhin.personalTrainer set name = ?, address = ?, cell = ? where id = ?;" ;
 
         try {
@@ -56,7 +56,7 @@ export class ProductRepository{
         }
     }
 
-    async deleteProduct(personalTrainer:PersonalTrainer) :Promise<PersonalTrainer>{
+    async deletePersonal(personalTrainer:PersonalTrainer) :Promise<PersonalTrainer>{
         const query = "DELETE FROM tojiJhin.personalTrainer where id = ?;" ;
 
         try {
@@ -71,14 +71,14 @@ export class ProductRepository{
         }
     }
 
-    async filterProductById(id: number) :Promise<PersonalTrainer>{
+    async filterPersonalById(id: number) :Promise<PersonalTrainer>{
         const query = "SELECT * FROM tojiJhin.personalTrainer where id = ?" ;
 
         try {
             const resultado = await executarComandoSQL(query, [id]);
             console.log('Professor localizado com sucesso, ID: ', resultado);
             return new Promise<PersonalTrainer>((resolve)=>{
-                resolve(resultado);
+                resolve(resultado[0]);
             })
         } catch (err:any) {
             console.error(`Falha ao procurar o Professor de ID ${id} gerando o erro: ${err}`);
@@ -86,22 +86,22 @@ export class ProductRepository{
         }
     }
 
-    async filterProductByName(name: string) :Promise<PersonalTrainer[]>{
-        const query = "SELECT * FROM tojiJhin.personalTrainer where name = ?" ;
+    async filterPersonalByCell(cell:number) {
+        const query = "SELECT * FROM tojiJhin.personalTrainer where cell = ?" ;
 
         try {
-            const resultado:PersonalTrainer[] = await executarComandoSQL(query, [name]);
+            const resultado = await executarComandoSQL(query, [cell]);
             console.log('Professor localizado com sucesso, ID: ', resultado);
-            return new Promise<PersonalTrainer[]>((resolve)=>{
-                resolve(resultado);
+            return new Promise<PersonalTrainer>((resolve)=>{
+                resolve(resultado[0]);
             })
         } catch (err:any) {
-            console.error(`Falha ao procurar o Professor ${name} gerando o erro: ${err}`);
+            console.error(`Falha ao procurar o Professor de ID ${cell} gerando o erro: ${err}`);
             throw err;
         }
     }
 
-    async filterAllProduct() :Promise<PersonalTrainer[]>{
+    async filterAllPersonal() :Promise<PersonalTrainer[]>{
         const query = "SELECT * FROM tojiJhin.personalTrainer" ;
 
         try {
