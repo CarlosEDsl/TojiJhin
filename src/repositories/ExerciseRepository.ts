@@ -2,6 +2,14 @@ import { executarComandoSQL } from "../databases/mysql";
 import { Exercise } from "../models/Exercise";
 
 export class ExerciseRepository {
+
+    private static instance:ExerciseRepository;
+    public static getInstance() {
+        if(!ExerciseRepository.instance) {
+            ExerciseRepository.instance = new ExerciseRepository();
+        }
+        return ExerciseRepository.instance;
+    }
     
     constructor() {
         this.createTable();
@@ -11,12 +19,8 @@ export class ExerciseRepository {
         const query = `
         CREATE TABLE IF NOT EXISTS tojiJhin.exercises (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(40) NOT NULL,
-            description VARCHAR(255) NOT NULL,
-            bench INT,
-            repetitions INT,
-            id_workout INT NOT NULL,
-            FOREIGN KEY(id_workout) REFERERENCES Workouts(id)
+            name VARCHAR(40) NOT NULL UNIQUE,
+            description VARCHAR(255) NOT NULL
         )`;
 
         try {
@@ -75,6 +79,20 @@ export class ExerciseRepository {
 
         try {
             const result = await executarComandoSQL(query, [id]);
+            console.log('Exercise finded, ID: ', result);
+            return new Promise<Exercise>((resolve)=>{
+                resolve(result[0]);
+            })
+        } catch (err:any) {
+            throw err;
+        }
+    }
+
+    async filterExerciseByName(name:string) :Promise<Exercise>{
+        const query = "SELECT * FROM tojiJhin.exercises where name = ?" ;
+
+        try {
+            const result = await executarComandoSQL(query, [name]);
             console.log('Exercise finded, ID: ', result);
             return new Promise<Exercise>((resolve)=>{
                 resolve(result[0]);

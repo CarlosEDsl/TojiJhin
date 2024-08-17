@@ -5,7 +5,7 @@ export class Exercise {
     private _name: string;
     private _description: string;
   
-    constructor(name: string, description: string, bench: number, repetitions: number, id_workout: number, id?: number) {
+    constructor(name: string, description: string, id?:number) {
       this._id = id || 0;
       this._name = name;
       this._description = description;
