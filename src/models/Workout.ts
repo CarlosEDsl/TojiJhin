@@ -3,18 +3,18 @@
 export class Workout {
     private _id: number;
     private _name: string;
-    private _finishDate: Date;
+    private _finishDate?: Date;
     private _description: string;
     private _id_trainee: number;
     private _id_personal: number;
   
-    constructor(id: number, name: string, finishDate: Date, description: string, id_trainee: number, id_personal: number) {
-      this._id = id;
-      this._name = name;
+    constructor(name?: string, description?: string, id_trainee?: number, id_personal?: number, finishDate?: Date, id?: number) {
+      this._id = id || 0;
+      this._name = name || '';
       this._finishDate = finishDate;
-      this._description = description;
-      this._id_trainee = id_trainee;
-      this._id_personal = id_personal;
+      this._description = description || '';
+      this._id_trainee = id_trainee || 0;
+      this._id_personal = id_personal || 0;
     }
   
     get id(): number {
@@ -33,7 +33,7 @@ export class Workout {
       this._name = value;
     }
   
-    get finishDate(): Date {
+    get finishDate(): Date | undefined {
       return this._finishDate;
     }
   

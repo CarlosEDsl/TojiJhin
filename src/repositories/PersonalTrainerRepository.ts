@@ -4,6 +4,13 @@ import { PersonalTrainer } from "../models/PersonalTrainer";
 
 export class PersonalTrainerRepository{
 
+    private static instance:PersonalTrainerRepository;
+    public static getInstance(){
+        if(!PersonalTrainerRepository.instance)
+            PersonalTrainerRepository.instance = new PersonalTrainerRepository();
+        return PersonalTrainerRepository.instance;
+    }
+
     constructor(){
         this.createTable();
     }

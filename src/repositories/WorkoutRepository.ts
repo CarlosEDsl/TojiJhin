@@ -102,7 +102,7 @@ export class WorkoutRepository {
 
         try {
             const result = await executarComandoSQL(query, [id_personal]);
-            const workouts = result.map((workout: any) => new Workout(workout.id, workout.name, new Date(workout.finishDate), workout.description, workout.id_trainee, workout.id_personal));
+            const workouts = result.map((workout: any) => new Workout(workout.id, workout.name, workout.finishDate, workout.description, workout.id_trainee, workout.id_personal));
             return new Promise<Workout[]>((resolve) => {
                 resolve(workouts);
             });
@@ -116,7 +116,7 @@ export class WorkoutRepository {
 
         try {
             const result = await executarComandoSQL(query, [id_trainee]);
-            const workouts = result.map((workout: any) => new Workout(workout.id, workout.name, new Date(workout.finishDate), workout.description, workout.id_trainee, workout.id_personal));
+            const workouts = result.map((workout: any) => new Workout(workout.id, workout.name, workout.finishDate, workout.description, workout.id_trainee, workout.id_personal));
             return new Promise<Workout[]>((resolve) => {
                 resolve(workouts);
             });
