@@ -33,7 +33,7 @@ export class PersonalTrainerService {
 
     async deletePersonal(personalDTO:PersonalTrainerDTO) {
         const personal = await this.personalTrainerRepository.filterPersonalById(personalDTO.id || 0);
-        if(personal.cell != personalDTO.cell || personal.name != personalDTO.name || personal.address != personal.address)
+        if(personal.cell != personalDTO.cell || personal.name != personalDTO.name || personal.address != personalDTO.address)
             throw new Error("data don't match");
         return await this.personalTrainerRepository.deletePersonal(personal);
     }

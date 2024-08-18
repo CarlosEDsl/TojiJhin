@@ -46,7 +46,7 @@ class PersonalTrainerService {
     deletePersonal(personalDTO) {
         return __awaiter(this, void 0, void 0, function* () {
             const personal = yield this.personalTrainerRepository.filterPersonalById(personalDTO.id || 0);
-            if (personal.cell != personalDTO.cell || personal.name != personalDTO.name || personal.address != personal.address)
+            if (personal.cell != personalDTO.cell || personal.name != personalDTO.name || personal.address != personalDTO.address)
                 throw new Error("data don't match");
             return yield this.personalTrainerRepository.deletePersonal(personal);
         });
