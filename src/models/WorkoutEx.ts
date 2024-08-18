@@ -4,11 +4,11 @@ export class WorkoutEx {
     private _id_workout: number;
     private _exerciseId:number;
     private _bench: number;
-    private _repetitions: number;
+    private _repetitions: string;
     private _priority: number;
     
 
-    constructor(id_workout:number, exerciseId:number, bench:number, repetitions:number, priority:number) {
+    constructor(id_workout:number, exerciseId:number, bench:number, repetitions:string, priority:number) {
         this._exerciseId = exerciseId;
         this._bench = bench;
         this._repetitions = repetitions;
@@ -40,11 +40,11 @@ export class WorkoutEx {
         this._bench = value;
     }
     
-    get repetitions(): number {
+    get repetitions(): string {
         return this._repetitions;
     }
     
-    set repetitions(value: number) {
+    set repetitions(value: string) {
         this._repetitions = value;
     }
     

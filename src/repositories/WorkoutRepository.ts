@@ -3,6 +3,14 @@ import { Workout } from "../models/Workout";
 
 export class WorkoutRepository {
 
+    private static instance:WorkoutRepository;
+    public static getInstance() {
+        if(!WorkoutRepository.instance) {
+            WorkoutRepository.instance = new WorkoutRepository();
+        }
+        return WorkoutRepository.instance;
+    }
+
     constructor() {
         this.createTable();
     }
@@ -79,7 +87,7 @@ export class WorkoutRepository {
                 const workout = result[0];
                 console.log('Workout found, ID: ', workout.id);
                 return new Promise<Workout>((resolve) => {
-                    resolve(new Workout(workout.id, workout.name, new Date(workout.finishDate), workout.description, workout.id_trainee, workout.id_personal));
+                    resolve(result[0]);
                 });
             } else {
                 throw new Error('Workout not found');
