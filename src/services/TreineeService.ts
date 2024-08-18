@@ -1,4 +1,4 @@
-import { TraineeDTO } from "../models/dtos/TraineeDTO";
+import { TraineeDTO } from './../models/dtos/TraineeDTO';
 import { Trainee } from "../models/Trainee";
 import { TraineeRepository } from "../repositories/TraineeRepository";
 
@@ -30,6 +30,13 @@ export class TraineeService {
         }
     }
 
+    async deleteTrainee(traineeDTO:TraineeDTO) {
+        const trainee = await this.traineeRepository.filterTraineeById(traineeDTO.id || 0);
+        if(trainee.name != traineeDTO.name || trainee.cell != traineeDTO.cell || trainee.age != traineeDTO.age
+            || trainee.address != traineeDTO.address || trainee.description != traineeDTO.description)
+            throw new Error("data don't match");
+    }
+
     async findTrainee(id:number) {
         const trainee = await this.traineeRepository.filterTraineeById(id);
         if(!trainee)
@@ -41,12 +48,12 @@ export class TraineeService {
         return await this.traineeRepository.filterAllTrainee();
     }
     
-    async verifyCell(cell:number) {
+    private async verifyCell(cell:number) {
         if(await this.traineeRepository.filterTraineeById(cell))
             throw new Error("this number is already in use");
     }
 
-    async dtoToTrainee(dto:TraineeDTO) {
+    private async dtoToTrainee(dto:TraineeDTO) {
         const trainee = new Trainee(dto.name, dto.age, dto.cell, dto.description, dto.address);
         return trainee;
     }

@@ -124,4 +124,17 @@ export class WorkoutRepository {
             throw err;
         }
     }
+
+    async filterAllWorkouts() {
+        const query = "SELECT * FROM tojiJhin.workouts";
+
+        try {
+            const result = await executarComandoSQL(query, []);
+            return new Promise<Workout[]>((resolve) => {
+                resolve(result);
+            });
+        } catch (err: any) {
+            throw err;
+        }
+    }
 }

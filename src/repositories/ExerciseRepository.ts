@@ -36,9 +36,10 @@ export class ExerciseRepository {
 
         try{
             const result = await executarComandoSQL(query, [exercise.name, exercise.description]);
+            exercise.id = result.insertId;
             console.log('Exercise inserted: ', result.insertId);
             return new Promise<Exercise>((resolve) => {
-                resolve(result);
+                resolve(exercise);
             })
         } catch(err) {
             console.log("insert error in exercises");
@@ -103,7 +104,7 @@ export class ExerciseRepository {
     }
 
     async filterAllExercise() :Promise<Exercise[]>{
-        const query = "SELECT * FROM tojiJhin.exercise WHERE id = ?";
+        const query = "SELECT * FROM tojiJhin.exercises";
 
         try {
             const result = await executarComandoSQL(query, []);

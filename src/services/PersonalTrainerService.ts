@@ -38,19 +38,23 @@ export class PersonalTrainerService {
         return await this.personalTrainerRepository.deletePersonal(personal);
     }
 
-    async findPersonal(personalDTO:PersonalTrainerDTO) {
-        const personal = await this.personalTrainerRepository.filterPersonalById(personalDTO.id || 0);
+    async findPersonal(id:number) {
+        const personal = await this.personalTrainerRepository.filterPersonalById(id);
         if(!personal)
             throw new Error("not found");
         return personal;
     }
 
-    async verifyCell(cell:number) {
+    async getAllPersonal() {
+        return await this.personalTrainerRepository.filterAllPersonal();
+    }
+
+    private async verifyCell(cell:number) {
         if(await this.personalTrainerRepository.filterPersonalByCell(cell))
             throw new Error("this cell number is already registered");
     }
 
-    async dtoToPersonal(dto:PersonalTrainerDTO){
+    private async dtoToPersonal(dto:PersonalTrainerDTO){
         const personal = new PersonalTrainer(dto.name, dto.address, dto.cell);
         return personal;
     }

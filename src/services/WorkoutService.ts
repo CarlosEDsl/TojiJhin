@@ -56,6 +56,18 @@ export class WorkoutService {
         return workout;
     }
 
+    async getAllWorkoutFromTrainee(id:number) {
+        return await this.workoutRepository.filterAllWorkoutsFromTrainee(id);
+    }
+
+    async getAllWorkoutFromPersonal(id:number) {
+        return await this.workoutRepository.filterAllWorkoutsFromPersonal(id);
+    }
+
+    async getAllWorkout() {
+        return await this.workoutRepository.filterAllWorkouts();
+    }
+
     async getExercises(workoutId:number) {
         const exercises = await this.workoutExRepository.filterWorkoutExFromWorkout(workoutId);
         return exercises;

@@ -3,13 +3,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Workout = void 0;
 class Workout {
-    constructor(id, name, finishDate, description, id_trainee, id_personal) {
-        this._id = id;
-        this._name = name;
+    constructor(name, description, id_trainee, id_personal, finishDate, id) {
+        this._id = id || 0;
+        this._name = name || '';
         this._finishDate = finishDate;
-        this._description = description;
-        this._id_trainee = id_trainee;
-        this._id_personal = id_personal;
+        this._description = description || '';
+        this._id_trainee = id_trainee || 0;
+        this._id_personal = id_personal || 0;
     }
     get id() {
         return this._id;

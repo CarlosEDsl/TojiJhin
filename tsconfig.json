@@ -1,17 +1,17 @@
 {
-    "compilerOptions": {
-      "target": "es6",                          // Compilar para ES6
-      "module": "commonjs",                     // Usar CommonJS para módulos
-      "outDir": "./dist",                       // Diretório de saída para arquivos compilados
-      "rootDir": "./src",                       // Diretório de entrada para arquivos TypeScript
-      "strict": true,                           // Habilitar todas as verificações estritas
-      "esModuleInterop": true,                  // Habilitar interoperabilidade com módulos ES
-      "skipLibCheck": true,                     // Ignorar checagem de tipos em arquivos de declaração
-      "forceConsistentCasingInFileNames": true, // Forçar consistência no uso de maiúsculas/minúsculas
-      "emitDecoratorMetadata": true,           // Habilitar metadados de decoradores (necessário para TSOA)
-      "experimentalDecorators": true            // Habilitar decoradores experimentais (necessário para TSOA)
-    },
-    "include": ["src/**/*.ts"],                 // Incluir arquivos TypeScript no diretório src
-    "exclude": ["node_modules"]                 // Excluir diretório node_modules
-  }
-  
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
+}

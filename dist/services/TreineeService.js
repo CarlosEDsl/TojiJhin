@@ -1,0 +1,78 @@
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TraineeService = void 0;
+const Trainee_1 = require("../models/Trainee");
+const TraineeRepository_1 = require("../repositories/TraineeRepository");
+class TraineeService {
+    constructor() {
+        this.traineeRepository = TraineeRepository_1.TraineeRepository.getInstance();
+    }
+    insertTrainee(traineeDTO) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const trainee = yield this.dtoToTrainee(traineeDTO);
+            try {
+                yield this.verifyCell(trainee.cell);
+            }
+            catch (err) {
+                throw err;
+            }
+            return yield this.traineeRepository.insertTrainee(trainee);
+        });
+    }
+    editTrainee(traineeDTO) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const trainee = yield this.dtoToTrainee(traineeDTO);
+            trainee.id = traineeDTO.id || 0;
+            try {
+                if (trainee.cell != (yield this.traineeRepository.filterTraineeById(trainee.id)).cell)
+                    yield this.verifyCell(trainee.cell);
+            }
+            catch (err) {
+                throw err;
+            }
+        });
+    }
+    deleteTrainee(traineeDTO) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const trainee = yield this.traineeRepository.filterTraineeById(traineeDTO.id || 0);
+            if (trainee.name != traineeDTO.name || trainee.cell != traineeDTO.cell || trainee.age != traineeDTO.age
+                || trainee.address != traineeDTO.address || trainee.description != traineeDTO.description)
+                throw new Error("data don't match");
+        });
+    }
+    findTrainee(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const trainee = yield this.traineeRepository.filterTraineeById(id);
+            if (!trainee)
+                throw new Error("Not found");
+            return trainee;
+        });
+    }
+    getAllTrainee() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.traineeRepository.filterAllTrainee();
+        });
+    }
+    verifyCell(cell) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (yield this.traineeRepository.filterTraineeById(cell))
+                throw new Error("this number is already in use");
+        });
+    }
+    dtoToTrainee(dto) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const trainee = new Trainee_1.Trainee(dto.name, dto.age, dto.cell, dto.description, dto.address);
+            return trainee;
+        });
+    }
+}
+exports.TraineeService = TraineeService;

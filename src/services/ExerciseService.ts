@@ -34,7 +34,7 @@ export class ExerciseService {
         const exercise = await this.exerciseRepository.filterExercise(exerciseDTO.id||0);
         if(!exercise)
             throw new Error("exercise not found");
-        if(exercise.name != exerciseDTO.name && exercise.description != exerciseDTO.description) {
+        if(exercise.name != exerciseDTO.name || exercise.description != exerciseDTO.description) {
             throw new Error("data don't match with id");
         }
         return await this.exerciseRepository.deleteExercise(exercise);
@@ -51,12 +51,12 @@ export class ExerciseService {
         return await this.exerciseRepository.filterAllExercise();
     }
 
-    async nameVerify(name:string) {
+    private async nameVerify(name:string) {
         if(await this.exerciseRepository.filterExerciseByName(name))
             throw new Error("this exercise name is already in use");
     }
 
-    async dtoToExercise(dto:ExerciseDTO) {
+    private async dtoToExercise(dto:ExerciseDTO) {
         const exercise = new Exercise(dto.name, dto.description);
         return exercise;
     }

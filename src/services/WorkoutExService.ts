@@ -54,7 +54,7 @@ export class WorkoutExService {
         return workoutEx;
     }
 
-    async workoutVerify(workoutEx:WorkoutEx) {
+    private async workoutVerify(workoutEx:WorkoutEx) {
         const workout = await this.workoutRepository.filterWorkout(workoutEx.id_workout);
         if(!workout)
             throw new Error("this workout don't exist")
@@ -66,13 +66,13 @@ export class WorkoutExService {
 
     }
     
-    async exerciseVerify(exerciseId:number) {
+    private async exerciseVerify(exerciseId:number) {
         const exercise = await this.exerciseRepository.filterExercise(exerciseId);
         if(!exercise)
             throw new Error("this exercise don't exist");
     }
 
-    async dtoToWorkoutEx(dto:WorkoutExDTO) {
+    private async dtoToWorkoutEx(dto:WorkoutExDTO) {
         const workoutEx = new WorkoutEx(dto.id_workout, dto.exerciseId, dto.bench, dto.repetitions, dto.priority)
         return workoutEx;
     }

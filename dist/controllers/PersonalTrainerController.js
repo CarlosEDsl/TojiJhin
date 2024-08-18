@@ -23,51 +23,124 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PersonalTrainerController = void 0;
 const tsoa_1 = require("tsoa");
-const PersonalTrainer_1 = require("../models/PersonalTrainer");
+const BasicResponseDTO_1 = require("../models/dtos/BasicResponseDTO");
+const PersonalTrainerDTO_1 = require("../models/dtos/PersonalTrainerDTO");
+const PersonalTrainerService_1 = require("../services/PersonalTrainerService");
 let PersonalTrainerController = class PersonalTrainerController extends tsoa_1.Controller {
     constructor() {
         super(...arguments);
-        this.trainers = [];
+        this.personalTrainerService = new PersonalTrainerService_1.PersonalTrainerService();
     }
-    getAllPersonalTrainers() {
+    createPersonalTrainer(personalTrainer, success, fail) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.trainers;
+            try {
+                const newPersonalTrainer = yield this.personalTrainerService.registerPersonal(personalTrainer);
+                return success(201, new BasicResponseDTO_1.BasicResponseDto("Successfully created", newPersonalTrainer));
+            }
+            catch (err) {
+                console.error("Error in createPersonalTrainer:", err.message);
+                return fail(400, new BasicResponseDTO_1.BasicResponseDto(err.message, undefined));
+            }
         });
     }
-    getPersonalTrainer(id) {
+    updatePersonalTrainer(personalTrainer, success, fail) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.trainers.find(trainer => trainer.id === id);
+            try {
+                const updatedPersonalTrainer = yield this.personalTrainerService.editPersonal(personalTrainer);
+                return success(200, new BasicResponseDTO_1.BasicResponseDto("Successfully updated", updatedPersonalTrainer));
+            }
+            catch (err) {
+                console.error("Error in updatePersonalTrainer:", err);
+                return fail(404, new BasicResponseDTO_1.BasicResponseDto(err.message, undefined));
+            }
         });
     }
-    createPersonalTrainer(trainer) {
+    deletePersonalTrainer(personalTrainer, success, fail) {
         return __awaiter(this, void 0, void 0, function* () {
-            this.trainers.push(trainer);
-            return trainer;
+            try {
+                yield this.personalTrainerService.deletePersonal(personalTrainer);
+                return success(200, new BasicResponseDTO_1.BasicResponseDto("Successfully deleted", undefined));
+            }
+            catch (err) {
+                console.error("Error in deletePersonalTrainer:", err);
+                return fail(404, new BasicResponseDTO_1.BasicResponseDto(err.message, undefined));
+            }
+        });
+    }
+    findPersonalTrainer(id, success, fail) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const personalTrainer = yield this.personalTrainerService.findPersonal(id);
+                if (!personalTrainer) {
+                    return fail(404, new BasicResponseDTO_1.BasicResponseDto("Personal Trainer not found", undefined));
+                }
+                return success(200, new BasicResponseDTO_1.BasicResponseDto("Successfully found", personalTrainer));
+            }
+            catch (err) {
+                console.error("Error in findPersonalTrainer:", err);
+                return fail(404, new BasicResponseDTO_1.BasicResponseDto("Error on search", err.message));
+            }
+        });
+    }
+    findAllPersonalTrainers(success, fail) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const personalTrainers = yield this.personalTrainerService.getAllPersonal();
+                return success(200, new BasicResponseDTO_1.BasicResponseDto("Successfully found", personalTrainers));
+            }
+            catch (err) {
+                console.error("Error in findAllPersonalTrainers:", err);
+                return fail(404, new BasicResponseDTO_1.BasicResponseDto("Error on search", err.message));
+            }
         });
     }
 };
 exports.PersonalTrainerController = PersonalTrainerController;
 __decorate([
-    (0, tsoa_1.Get)('/'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], PersonalTrainerController.prototype, "getAllPersonalTrainers", null);
-__decorate([
-    (0, tsoa_1.Get)('{id}'),
-    __param(0, (0, tsoa_1.Path)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
-    __metadata("design:returntype", Promise)
-], PersonalTrainerController.prototype, "getPersonalTrainer", null);
-__decorate([
-    (0, tsoa_1.Post)('/'),
+    (0, tsoa_1.Post)(),
     __param(0, (0, tsoa_1.Body)()),
+    __param(1, (0, tsoa_1.Res)()),
+    __param(2, (0, tsoa_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [PersonalTrainer_1.PersonalTrainer]),
+    __metadata("design:paramtypes", [PersonalTrainerDTO_1.PersonalTrainerDTO, Function, Function]),
     __metadata("design:returntype", Promise)
 ], PersonalTrainerController.prototype, "createPersonalTrainer", null);
+__decorate([
+    (0, tsoa_1.Put)(),
+    __param(0, (0, tsoa_1.Body)()),
+    __param(1, (0, tsoa_1.Res)()),
+    __param(2, (0, tsoa_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [PersonalTrainerDTO_1.PersonalTrainerDTO, Function, Function]),
+    __metadata("design:returntype", Promise)
+], PersonalTrainerController.prototype, "updatePersonalTrainer", null);
+__decorate([
+    (0, tsoa_1.Delete)(),
+    __param(0, (0, tsoa_1.Body)()),
+    __param(1, (0, tsoa_1.Res)()),
+    __param(2, (0, tsoa_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [PersonalTrainerDTO_1.PersonalTrainerDTO, Function, Function]),
+    __metadata("design:returntype", Promise)
+], PersonalTrainerController.prototype, "deletePersonalTrainer", null);
+__decorate([
+    (0, tsoa_1.Get)("id/{id}"),
+    __param(0, (0, tsoa_1.Path)()),
+    __param(1, (0, tsoa_1.Res)()),
+    __param(2, (0, tsoa_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Function, Function]),
+    __metadata("design:returntype", Promise)
+], PersonalTrainerController.prototype, "findPersonalTrainer", null);
+__decorate([
+    (0, tsoa_1.Get)("all"),
+    __param(0, (0, tsoa_1.Res)()),
+    __param(1, (0, tsoa_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Function, Function]),
+    __metadata("design:returntype", Promise)
+], PersonalTrainerController.prototype, "findAllPersonalTrainers", null);
 exports.PersonalTrainerController = PersonalTrainerController = __decorate([
-    (0, tsoa_1.Route)('personal-trainers'),
-    (0, tsoa_1.Tags)('Personal Trainers')
+    (0, tsoa_1.Route)("personal-trainer"),
+    (0, tsoa_1.Tags)("PersonalTrainer")
 ], PersonalTrainerController);

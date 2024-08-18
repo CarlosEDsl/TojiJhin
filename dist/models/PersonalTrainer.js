@@ -3,8 +3,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PersonalTrainer = void 0;
 class PersonalTrainer {
-    constructor(id, name, address, cell) {
-        this._id = id;
+    constructor(name, address, cell, id) {
+        this._id = id || 0;
         this._name = name;
         this._address = address;
         this._cell = cell;
