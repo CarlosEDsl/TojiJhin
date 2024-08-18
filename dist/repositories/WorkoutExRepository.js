@@ -25,12 +25,15 @@ class WorkoutExRepository {
         return __awaiter(this, void 0, void 0, function* () {
             const query = `
         CREATE TABLE IF NOT EXISTS tojiJhin.workoutEx (
-            workoutId INT PRIMARY KEY,
+            workoutId INT,
             exerciseId INT,
             bench INT,
             repetitions VARCHAR(10),
-            priority INT NOT NULL
-        )`;
+            priority INT NOT NULL,
+            PRIMARY KEY (workoutId, exerciseId),
+            FOREIGN KEY (workoutId) REFERENCES tojiJhin.workouts(id),
+            FOREIGN KEY (exerciseId) REFERENCES tojiJhin.exercises(id)
+        );`;
             try {
                 const result = yield (0, mysql_1.executarComandoSQL)(query, []);
                 console.log('Query successful executed:', result);
@@ -44,10 +47,10 @@ class WorkoutExRepository {
         return __awaiter(this, void 0, void 0, function* () {
             const query = "INSERT INTO tojiJhin.workoutEx (workoutId, exerciseId, bench, repetitions, priority) VALUES (?, ?, ?, ?, ?)";
             try {
-                const result = yield (0, mysql_1.executarComandoSQL)(query, [workoutEx.id_workout, workoutEx.exercise,
+                const result = yield (0, mysql_1.executarComandoSQL)(query, [workoutEx.workoutId, workoutEx.exerciseId,
                     workoutEx.bench, workoutEx.repetitions, workoutEx.priority]);
                 return new Promise((resolve) => {
-                    resolve(result);
+                    resolve(workoutEx);
                 });
             }
             catch (err) {
@@ -57,10 +60,10 @@ class WorkoutExRepository {
     }
     updateWorkoutEx(workoutEx) {
         return __awaiter(this, void 0, void 0, function* () {
-            const query = "UPDATE tojiJhin.workoutEx set exerciseId, bench = ?, repetitions = ?, priority = ? workoutId id = ?;";
+            const query = "UPDATE tojiJhin.workoutEx set bench = ?, repetitions = ?, priority = ? WHERE workoutId = ? AND exerciseId = ?;";
             try {
-                const result = yield (0, mysql_1.executarComandoSQL)(query, [workoutEx.exercise, workoutEx.bench, workoutEx.repetitions,
-                    workoutEx.priority, workoutEx.id_workout]);
+                const result = yield (0, mysql_1.executarComandoSQL)(query, [workoutEx.bench, workoutEx.repetitions, workoutEx.priority,
+                    workoutEx.workoutId, workoutEx.exerciseId]);
                 return new Promise((resolve) => {
                     resolve(workoutEx);
                 });
@@ -72,15 +75,13 @@ class WorkoutExRepository {
     }
     deleteWorkoutEx(workoutEx) {
         return __awaiter(this, void 0, void 0, function* () {
-            const query = "DELETE FROM tojiJhin.workoutEx where workoutId = ? AND exerciseId = ?;";
+            const query = "DELETE FROM tojiJhin.workoutEx WHERE workoutId = ? AND exerciseId = ?;";
             try {
-                const result = yield (0, mysql_1.executarComandoSQL)(query, [workoutEx.id_workout, workoutEx.exercise]);
-                return new Promise((resolve) => {
-                    resolve(result);
-                });
+                console.log(workoutEx.workoutId, workoutEx.exerciseId);
+                yield (0, mysql_1.executarComandoSQL)(query, [workoutEx.workoutId, workoutEx.exerciseId]);
             }
             catch (err) {
-                throw err;
+                throw new Error(`Failed to delete WorkoutEx: ${err.message}`);
             }
         });
     }

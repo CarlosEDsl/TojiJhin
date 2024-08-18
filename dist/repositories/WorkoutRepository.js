@@ -94,16 +94,7 @@ class WorkoutRepository {
             const query = "SELECT * FROM tojiJhin.workouts WHERE id = ?";
             try {
                 const result = yield (0, mysql_1.executarComandoSQL)(query, [id]);
-                if (result.length > 0) {
-                    const workout = result[0];
-                    console.log('Workout found, ID: ', workout.id);
-                    return new Promise((resolve) => {
-                        resolve(result[0]);
-                    });
-                }
-                else {
-                    throw new Error('Workout not found');
-                }
+                return result[0];
             }
             catch (err) {
                 throw err;

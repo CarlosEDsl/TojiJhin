@@ -10,24 +10,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.WorkoutExService = void 0;
-const WorkoutRepository_1 = require("./../repositories/WorkoutRepository");
 const WorkoutExRepository_1 = require("../repositories/WorkoutExRepository");
-const WorkoutEx_1 = require("../models/WorkoutEx");
+const WorkoutRepository_1 = require("./../repositories/WorkoutRepository");
 const ExerciseRepository_1 = require("../repositories/ExerciseRepository");
+const WorkoutEx_1 = require("../models/WorkoutEx");
 class WorkoutExService {
     constructor() {
         this.workoutExRepository = WorkoutExRepository_1.WorkoutExRepository.getInstance();
         this.workoutRepository = WorkoutRepository_1.WorkoutRepository.getInstance();
         this.exerciseRepository = ExerciseRepository_1.ExerciseRepository.getInstance();
     }
-    insertExInWorkout(workouExtDTO) {
+    insertExInWorkout(workoutExDTO) {
         return __awaiter(this, void 0, void 0, function* () {
-            const workoutEx = yield this.dtoToWorkoutEx(workouExtDTO);
+            console.log('insertExInWorkout called with:', workoutExDTO);
+            const workoutEx = yield this.dtoToWorkoutEx(workoutExDTO);
+            console.log('Converted WorkoutEx:', workoutEx);
             try {
                 yield this.workoutVerify(workoutEx);
-                yield this.exerciseVerify(workoutEx.exercise);
+                yield this.exerciseVerify(workoutEx.exerciseId);
+                yield this.repeaterVerify(workoutEx);
             }
             catch (err) {
+                console.error('Error in insertExInWorkout:', err);
                 throw err;
             }
             return yield this.workoutExRepository.insertWorkoutEx(workoutEx);
@@ -35,57 +39,87 @@ class WorkoutExService {
     }
     editWorkoutEx(workoutExDTO) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log('editWorkoutEx called with:', workoutExDTO);
             const workoutEx = yield this.dtoToWorkoutEx(workoutExDTO);
-            try {
-                yield this.workoutVerify(workoutEx);
-                yield this.exerciseVerify(workoutEx.exercise);
+            console.log('Converted WorkoutEx:', workoutEx);
+            const oldWorkoutEx = yield this.workoutExRepository.filterWorkoutEx(workoutEx.workoutId, workoutEx.exerciseId);
+            console.log('Old WorkoutEx:', oldWorkoutEx);
+            if (!oldWorkoutEx) {
+                throw new Error("Not found");
             }
-            catch (err) {
-                throw err;
-            }
-            return yield this.workoutExRepository.updateWorkoutEx(workoutEx);
+            yield this.workoutExRepository.updateWorkoutEx(workoutEx);
         });
     }
     deleteWorkoutEx(workoutExDTO) {
         return __awaiter(this, void 0, void 0, function* () {
-            const workoutEx = yield this.workoutExRepository.filterWorkoutEx(workoutExDTO.id_workout, workoutExDTO.exerciseId);
-            if (workoutEx.priority != workoutExDTO.priority)
-                throw new Error("data don't match");
+            console.log('deleteWorkoutEx called with:', workoutExDTO);
+            const workoutEx = yield this.workoutExRepository.filterWorkoutEx(workoutExDTO.workoutId, workoutExDTO.exerciseId);
+            console.log('WorkoutEx found for deletion:', workoutEx);
+            if (!workoutEx) {
+                throw new Error("Not found");
+            }
+            if (workoutEx.priority !== workoutExDTO.priority ||
+                workoutEx.bench !== workoutExDTO.bench ||
+                workoutEx.repetitions !== workoutExDTO.repetitions) {
+                throw new Error("Data doesn't match");
+            }
             yield this.workoutExRepository.deleteWorkoutEx(workoutEx);
         });
     }
     getWorkoutEx(workoutId, exerciseId) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log('getWorkoutEx called with:', { workoutId, exerciseId });
             const workoutEx = yield this.workoutExRepository.filterWorkoutEx(workoutId, exerciseId);
+            console.log('WorkoutEx found:', workoutEx);
             if (!workoutEx) {
-                throw new Error("exercise don't found");
+                throw new Error("WorkoutEx not found");
             }
             return workoutEx;
         });
     }
+    getWorkoutAllEx(workoutId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log('getWorkoutAllEx called with:', workoutId);
+            const exercises = yield this.workoutExRepository.filterWorkoutExFromWorkout(workoutId);
+            console.log('All WorkoutEx for workoutId:', exercises);
+            return exercises;
+        });
+    }
     workoutVerify(workoutEx) {
         return __awaiter(this, void 0, void 0, function* () {
-            const workout = yield this.workoutRepository.filterWorkout(workoutEx.id_workout);
-            if (!workout)
-                throw new Error("this workout don't exist");
-            const exercises = yield this.workoutExRepository.filterWorkoutExFromWorkout(workout.id);
-            exercises.map(ex => {
-                if (ex.exercise == workoutEx.exercise)
-                    throw new Error("this exercise is already in workout");
-            });
+            console.log('workoutVerify called with:', workoutEx);
+            const workout = yield this.workoutRepository.filterWorkout(workoutEx.workoutId);
+            console.log('Workout found:', workout);
+            if (!workout) {
+                throw new Error("This workout doesn't exist");
+            }
+        });
+    }
+    repeaterVerify(workoutEx) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log('repeaterVerify called with:', workoutEx);
+            const exercises = yield this.workoutExRepository.filterWorkoutExFromWorkout(workoutEx.workoutId);
+            console.log('All exercises in workout:', exercises);
+            const exerciseExists = exercises.some(ex => ex.exerciseId === workoutEx.exerciseId);
+            if (exerciseExists) {
+                throw new Error("This exercise is already in the workout");
+            }
         });
     }
     exerciseVerify(exerciseId) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log('exerciseVerify called with:', exerciseId);
             const exercise = yield this.exerciseRepository.filterExercise(exerciseId);
-            if (!exercise)
-                throw new Error("this exercise don't exist");
+            console.log('Exercise found:', exercise);
+            if (!exercise) {
+                throw new Error("This exercise doesn't exist");
+            }
         });
     }
     dtoToWorkoutEx(dto) {
         return __awaiter(this, void 0, void 0, function* () {
-            const workoutEx = new WorkoutEx_1.WorkoutEx(dto.id_workout, dto.exerciseId, dto.bench, dto.repetitions, dto.priority);
-            return workoutEx;
+            console.log('dtoToWorkoutEx called with:', dto);
+            return new WorkoutEx_1.WorkoutEx(dto.workoutId, dto.exerciseId, dto.bench, dto.repetitions, dto.priority);
         });
     }
 }

@@ -29,7 +29,7 @@ const models = {
     "WorkoutExDTO": {
         "dataType": "refObject",
         "properties": {
-            "id_workout": { "dataType": "double", "required": true },
+            "workoutId": { "dataType": "double", "required": true },
             "bench": { "dataType": "double", "required": true },
             "repetitions": { "dataType": "string", "required": true },
             "priority": { "dataType": "double", "required": true },
@@ -183,7 +183,7 @@ function RegisterRoutes(app) {
         });
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.get('/workout-ex', ...((0, runtime_1.fetchMiddlewares)(WorkoutExController_1.WorkoutExController)), ...((0, runtime_1.fetchMiddlewares)(WorkoutExController_1.WorkoutExController.prototype.getExercisesFromWorkout)), function WorkoutExController_getExercisesFromWorkout(request, response, next) {
+    app.get('/workout-ex', ...((0, runtime_1.fetchMiddlewares)(WorkoutExController_1.WorkoutExController)), ...((0, runtime_1.fetchMiddlewares)(WorkoutExController_1.WorkoutExController.prototype.findExercise)), function WorkoutExController_findExercise(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const args = {
                 workoutId: { "in": "query", "name": "workoutId", "required": true, "dataType": "double" },
@@ -197,7 +197,34 @@ function RegisterRoutes(app) {
                 validatedArgs = templateService.getValidatedArgs({ args, request, response });
                 const controller = new WorkoutExController_1.WorkoutExController();
                 yield templateService.apiHandler({
-                    methodName: 'getExercisesFromWorkout',
+                    methodName: 'findExercise',
+                    controller,
+                    response,
+                    next,
+                    validatedArgs,
+                    successStatus: undefined,
+                });
+            }
+            catch (err) {
+                return next(err);
+            }
+        });
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.get('/workout-ex/workout/:workoutId', ...((0, runtime_1.fetchMiddlewares)(WorkoutExController_1.WorkoutExController)), ...((0, runtime_1.fetchMiddlewares)(WorkoutExController_1.WorkoutExController.prototype.getExercisesByWorkout)), function WorkoutExController_getExercisesByWorkout(request, response, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const args = {
+                workoutId: { "in": "path", "name": "workoutId", "required": true, "dataType": "double" },
+                success: { "in": "res", "name": "200", "required": true, "ref": "BasicResponseDto" },
+                fail: { "in": "res", "name": "404", "required": true, "ref": "BasicResponseDto" },
+            };
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+            let validatedArgs = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                const controller = new WorkoutExController_1.WorkoutExController();
+                yield templateService.apiHandler({
+                    methodName: 'getExercisesByWorkout',
                     controller,
                     response,
                     next,

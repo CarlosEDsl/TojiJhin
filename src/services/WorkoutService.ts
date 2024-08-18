@@ -26,6 +26,11 @@ export class WorkoutService {
 
     async editWorkout(workoutDTO:WorkoutDTO) {
         const workout = await this.dtoToWorkout(workoutDTO);
+        workout.id = workoutDTO.id || 0;
+        const oldWorkout = await this.workoutRepository.filterWorkout(workout.id)
+
+        if(!oldWorkout)
+            throw new Error("workout not found");
 
         try {
             this.foreignVerify(workout);
@@ -41,10 +46,10 @@ export class WorkoutService {
             throw new Error("Workout not found");
 
         if(workout.id_personal != workoutDTO.id_personal || workout.id_trainee != workoutDTO.id_trainee 
-            || workout.finishDate != workoutDTO.finishDate || workout.description != workoutDTO.description
+            || workout.finishDate?.getTime() != workoutDTO.finishDate?.getTime() || workout.description != workoutDTO.description
             || workout.name != workoutDTO.name
         )
-        throw new Error("Data don't match");
+            throw new Error("Data don't match");
             
         await this.workoutRepository.deleteWorkout(workout);
     }
@@ -88,5 +93,4 @@ export class WorkoutService {
         const workout = new Workout(workoutDTO.name, workoutDTO.description, workoutDTO.id_trainee, workoutDTO.id_personal, workoutDTO.finishDate, workoutDTO.id);
         return workout;
     }
-
 }

@@ -20,8 +20,11 @@ export class ExerciseService {
     async editExercise(exerciseDTO:ExerciseDTO) {
         const exercise = await this.dtoToExercise(exerciseDTO);
         exercise.id = exerciseDTO.id || 0;
+        const oldExercise = await this.exerciseRepository.filterExercise(exercise.id);
+        if(!oldExercise)
+            throw new Error("exercise not found")
         try{
-            if(exercise.name != (await this.exerciseRepository.filterExercise(exercise.id)).name)
+            if(exercise.name != oldExercise.name)
                 await this.nameVerify(exercise.name);
         } catch(err) {
             throw err;

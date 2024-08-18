@@ -67,10 +67,22 @@ let WorkoutExController = class WorkoutExController extends tsoa_1.Controller {
             }
         });
     }
-    getExercisesFromWorkout(workoutId, exerciseId, success, fail) {
+    findExercise(workoutId, exerciseId, success, fail) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const workoutEx = yield this.workoutExService.getWorkoutEx(workoutId, exerciseId);
+                return success(200, new BasicResponseDTO_1.BasicResponseDto("Successfully found", workoutEx));
+            }
+            catch (err) {
+                console.error("Error in findWorkoutEx:", err.message);
+                return fail(404, new BasicResponseDTO_1.BasicResponseDto("Error on search", err.message));
+            }
+        });
+    }
+    getExercisesByWorkout(workoutId, success, fail) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const workoutEx = yield this.workoutExService.getWorkoutAllEx(workoutId);
                 return success(200, new BasicResponseDTO_1.BasicResponseDto("Successfully found", workoutEx));
             }
             catch (err) {
@@ -117,7 +129,16 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, Number, Function, Function]),
     __metadata("design:returntype", Promise)
-], WorkoutExController.prototype, "getExercisesFromWorkout", null);
+], WorkoutExController.prototype, "findExercise", null);
+__decorate([
+    (0, tsoa_1.Get)("workout/{workoutId}"),
+    __param(0, (0, tsoa_1.Path)()),
+    __param(1, (0, tsoa_1.Res)()),
+    __param(2, (0, tsoa_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Function, Function]),
+    __metadata("design:returntype", Promise)
+], WorkoutExController.prototype, "getExercisesByWorkout", null);
 exports.WorkoutExController = WorkoutExController = __decorate([
     (0, tsoa_1.Route)("workout-ex"),
     (0, tsoa_1.Tags)("WorkoutEx")

@@ -48,11 +48,12 @@ class WorkoutService {
     }
     deleteWorkout(workoutDTO) {
         return __awaiter(this, void 0, void 0, function* () {
+            var _a, _b;
             const workout = yield this.workoutRepository.filterWorkout(workoutDTO.id || 0);
             if (!workout)
                 throw new Error("Workout not found");
             if (workout.id_personal != workoutDTO.id_personal || workout.id_trainee != workoutDTO.id_trainee
-                || workout.finishDate != workoutDTO.finishDate || workout.description != workoutDTO.description
+                || ((_a = workout.finishDate) === null || _a === void 0 ? void 0 : _a.getTime()) != ((_b = workoutDTO.finishDate) === null || _b === void 0 ? void 0 : _b.getTime()) || workout.description != workoutDTO.description
                 || workout.name != workoutDTO.name)
                 throw new Error("Data don't match");
             yield this.workoutRepository.deleteWorkout(workout);

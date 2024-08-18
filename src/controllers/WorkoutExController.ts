@@ -2,7 +2,6 @@ import { Route, Tags, Controller, Post, Body, Res, TsoaResponse, Put, Delete, Ge
 import { BasicResponseDto } from "../models/dtos/BasicResponseDTO";
 import { WorkoutExDTO } from "../models/dtos/WorkoutExDTO";
 import { WorkoutExService } from "../services/WorkoutExService";
-import { WorkoutExFindDTO } from "../models/dtos/WorkoutExFindDTO";
 
 @Route("workout-ex")
 @Tags("WorkoutEx")
@@ -55,7 +54,7 @@ export class WorkoutExController extends Controller {
     }
 
     @Get()
-    async getExercisesFromWorkout(
+    async findExercise(
         @Query() workoutId: number,
         @Query() exerciseId: number,
         @Res() success: TsoaResponse<200, BasicResponseDto>,
@@ -63,6 +62,21 @@ export class WorkoutExController extends Controller {
     ): Promise<void> {
         try {
             const workoutEx = await this.workoutExService.getWorkoutEx(workoutId, exerciseId);
+            return success(200, new BasicResponseDto("Successfully found", workoutEx));
+        } catch (err: any) {
+            console.error("Error in findWorkoutEx:", err.message);
+            return fail(404, new BasicResponseDto("Error on search", err.message));
+        }
+    }
+
+    @Get("workout/{workoutId}")
+    async getExercisesByWorkout(
+        @Path() workoutId: number,
+        @Res() success: TsoaResponse<200, BasicResponseDto>,
+        @Res() fail: TsoaResponse<404, BasicResponseDto>
+    ): Promise<void> {
+        try {
+            const workoutEx = await this.workoutExService.getWorkoutAllEx(workoutId);
             return success(200, new BasicResponseDto("Successfully found", workoutEx));
         } catch (err: any) {
             console.error("Error in findWorkoutEx:", err.message);

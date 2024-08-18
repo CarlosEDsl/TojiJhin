@@ -32,6 +32,8 @@ class TraineeService {
         return __awaiter(this, void 0, void 0, function* () {
             const trainee = yield this.dtoToTrainee(traineeDTO);
             trainee.id = traineeDTO.id || 0;
+            if (!(yield this.traineeRepository.filterTraineeById(trainee.id)))
+                throw new Error("trainee not found");
             try {
                 if (trainee.cell != (yield this.traineeRepository.filterTraineeById(trainee.id)).cell)
                     yield this.verifyCell(trainee.cell);
@@ -39,14 +41,18 @@ class TraineeService {
             catch (err) {
                 throw err;
             }
+            return this.traineeRepository.updateTrainee(trainee);
         });
     }
     deleteTrainee(traineeDTO) {
         return __awaiter(this, void 0, void 0, function* () {
             const trainee = yield this.traineeRepository.filterTraineeById(traineeDTO.id || 0);
+            if (!trainee)
+                throw new Error("trainee not found");
             if (trainee.name != traineeDTO.name || trainee.cell != traineeDTO.cell || trainee.age != traineeDTO.age
                 || trainee.address != traineeDTO.address || trainee.description != traineeDTO.description)
                 throw new Error("data don't match");
+            return this.traineeRepository.deleteTrainee(trainee);
         });
     }
     findTrainee(id) {
@@ -64,7 +70,7 @@ class TraineeService {
     }
     verifyCell(cell) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (yield this.traineeRepository.filterTraineeById(cell))
+            if (yield this.traineeRepository.filterTraineeByCell(cell))
                 throw new Error("this number is already in use");
         });
     }

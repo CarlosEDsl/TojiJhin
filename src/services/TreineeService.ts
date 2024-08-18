@@ -21,20 +21,28 @@ export class TraineeService {
     async editTrainee(traineeDTO:TraineeDTO) {
         const trainee = await this.dtoToTrainee(traineeDTO);
         trainee.id = traineeDTO.id || 0;
-
+        if(!await this.traineeRepository.filterTraineeById(trainee.id))
+            throw new Error("trainee not found");
         try {
             if(trainee.cell != (await this.traineeRepository.filterTraineeById(trainee.id)).cell)
                 await this.verifyCell(trainee.cell);
         } catch(err) {
             throw err;
         }
+        return this.traineeRepository.updateTrainee(trainee);
     }
 
     async deleteTrainee(traineeDTO:TraineeDTO) {
         const trainee = await this.traineeRepository.filterTraineeById(traineeDTO.id || 0);
+
+        if(!trainee)
+            throw new Error("trainee not found");
+
         if(trainee.name != traineeDTO.name || trainee.cell != traineeDTO.cell || trainee.age != traineeDTO.age
             || trainee.address != traineeDTO.address || trainee.description != traineeDTO.description)
             throw new Error("data don't match");
+
+        return this.traineeRepository.deleteTrainee(trainee);
     }
 
     async findTrainee(id:number) {
@@ -49,7 +57,7 @@ export class TraineeService {
     }
     
     private async verifyCell(cell:number) {
-        if(await this.traineeRepository.filterTraineeById(cell))
+        if(await this.traineeRepository.filterTraineeByCell(cell))
             throw new Error("this number is already in use");
     }
 

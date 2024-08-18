@@ -4,7 +4,6 @@ import { WorkoutExDTO } from './../models/dtos/WorkoutExDTO';
 import { WorkoutExRepository } from "../repositories/WorkoutExRepository";
 import { WorkoutEx } from '../models/WorkoutEx';
 import { ExerciseRepository } from '../repositories/ExerciseRepository';
-import e from 'express';
 
 export class WorkoutExService {
 
@@ -14,10 +13,10 @@ export class WorkoutExService {
 
     async insertExInWorkout(workouExtDTO:WorkoutExDTO) {
         const workoutEx = await this.dtoToWorkoutEx(workouExtDTO);
-
         try {
             await this.workoutVerify(workoutEx);
-            await this.exerciseVerify(workoutEx.exercise);
+            await this.exerciseVerify(workoutEx.exerciseId);
+            await this.repeaterVerify(workoutEx);
         } catch(err) {
             throw err;
         }
@@ -26,21 +25,23 @@ export class WorkoutExService {
 
     async editWorkoutEx(workoutExDTO:WorkoutExDTO) {
         const workoutEx = await this.dtoToWorkoutEx(workoutExDTO);
-
-        try{
-            await this.workoutVerify(workoutEx);
-            await this.exerciseVerify(workoutEx.exercise);
-        } catch(err) {
-            throw err;
+        const oldWorkoutEx = await this.workoutExRepository.filterWorkoutEx(workoutEx.workoutId, workoutEx.exerciseId);
+        if(!oldWorkoutEx) {
+            throw new Error("Not found");
         }
+
         return await this.workoutExRepository.updateWorkoutEx(workoutEx);
     }
 
     async deleteWorkoutEx(workoutExDTO:WorkoutExDTO) {
-        const workoutEx = await this.workoutExRepository.filterWorkoutEx(workoutExDTO.id_workout, workoutExDTO.exerciseId);
-    
-        if(workoutEx.priority != workoutExDTO.priority)
+        const workoutEx = await this.workoutExRepository.filterWorkoutEx(workoutExDTO.workoutId, workoutExDTO.exerciseId);
+
+        if(!workoutEx)
+            throw new Error("Not found");
+
+        if(workoutEx.priority != workoutExDTO.priority || workoutEx.bench != workoutExDTO.bench || workoutEx.repetitions != workoutExDTO.repetitions)
             throw new Error("data don't match");
+        
         await this.workoutExRepository.deleteWorkoutEx(workoutEx);
     }
 
@@ -48,22 +49,29 @@ export class WorkoutExService {
         const workoutEx = await this.workoutExRepository.filterWorkoutEx(workoutId, exerciseId);
 
         if(!workoutEx) {
-            throw new Error("exercise don't found");
+            throw new Error("Exercise not found");
         }
 
         return workoutEx;
     }
 
+    async getWorkoutAllEx(workoutId:number) {
+        return await this.workoutExRepository.filterWorkoutExFromWorkout(workoutId);
+    }
+
     private async workoutVerify(workoutEx:WorkoutEx) {
-        const workout = await this.workoutRepository.filterWorkout(workoutEx.id_workout);
+        const workout = await this.workoutRepository.filterWorkout(workoutEx.workoutId);
         if(!workout)
             throw new Error("this workout don't exist")
-        const exercises = await this.workoutExRepository.filterWorkoutExFromWorkout(workout.id);
-        exercises.map(ex => {
-            if(ex.exercise == workoutEx.exercise)
-                throw new Error("this exercise is already in workout");
-        })
+    }
 
+    private async repeaterVerify(workoutEx: WorkoutEx): Promise<void> {
+        const exercises = await this.workoutExRepository.filterWorkoutExFromWorkout(workoutEx.workoutId);
+        const exerciseExists = exercises.some(ex => ex.exerciseId === workoutEx.exerciseId);
+
+        if (exerciseExists) {
+            throw new Error("This exercise is already in the workout");
+        }
     }
     
     private async exerciseVerify(exerciseId:number) {
@@ -73,7 +81,7 @@ export class WorkoutExService {
     }
 
     private async dtoToWorkoutEx(dto:WorkoutExDTO) {
-        const workoutEx = new WorkoutEx(dto.id_workout, dto.exerciseId, dto.bench, dto.repetitions, dto.priority)
+        const workoutEx = new WorkoutEx(dto.workoutId, dto.exerciseId, dto.bench, dto.repetitions, dto.priority)
         return workoutEx;
     }
 

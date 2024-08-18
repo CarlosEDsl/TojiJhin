@@ -40,13 +40,13 @@ export class TraineeRepository{
 
         try {
             const resultado = await executarComandoSQL(query, [trainee.name, trainee.age,trainee.address, trainee.cell, trainee.description]);
-            console.log('Professor adicionado com sucesso, ID: ', resultado.insertId);
+            console.log('Aluno adicionado com sucesso, ID: ', resultado.insertId);
             trainee.id = resultado.insertId;
             return new Promise<Trainee>((resolve)=>{
                 resolve(trainee);
             })
         } catch (err) {
-            console.error('Erro ao adicionar professor:', err);
+            console.error('Erro ao adicionar aluno:', err);
             throw err;
         }
     }
@@ -97,16 +97,16 @@ export class TraineeRepository{
     }
 
     async filterTraineeByCell(cell:number) {
-        const query = "SELECT * FROM tojiJhin.trainee where cell = ?" ;
+        const query = "SELECT * FROM tojiJhin.trainee WHERE cell = ?" ;
 
         try {
             const resultado = await executarComandoSQL(query, [cell]);
-            console.log('Professor localizado com sucesso, ID: ', resultado);
+            console.log('Aluno localizado com sucesso, ID: ', resultado);
             return new Promise<Trainee>((resolve)=>{
                 resolve(resultado[0]);
             })
         } catch (err:any) {
-            console.error(`Falha ao procurar o Professor de ID ${cell} gerando o erro: ${err}`);
+            console.error(`Falha ao procurar o Aluno de ID ${cell} gerando o erro: ${err}`);
             throw err;
         }
     }

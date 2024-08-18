@@ -83,15 +83,7 @@ export class WorkoutRepository {
 
         try {
             const result = await executarComandoSQL(query, [id]);
-            if (result.length > 0) {
-                const workout = result[0];
-                console.log('Workout found, ID: ', workout.id);
-                return new Promise<Workout>((resolve) => {
-                    resolve(result[0]);
-                });
-            } else {
-                throw new Error('Workout not found');
-            }
+            return result[0];
         } catch (err: any) {
             throw err;
         }

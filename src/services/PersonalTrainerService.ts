@@ -21,6 +21,9 @@ export class PersonalTrainerService {
         const personal = await this.dtoToPersonal(personalDTO);
         personal.id = personalDTO.id || 0;
 
+        if(await this.personalTrainerRepository.filterPersonalById(personal.id))
+            throw new Error("personal not found");
+
         if(personal.cell != (await this.personalTrainerRepository.filterPersonalById(personal.id)).cell) {
             try{
                 await this.verifyCell(personal.cell);
@@ -33,6 +36,8 @@ export class PersonalTrainerService {
 
     async deletePersonal(personalDTO:PersonalTrainerDTO) {
         const personal = await this.personalTrainerRepository.filterPersonalById(personalDTO.id || 0);
+        if(!personal)
+            throw new Error("personal not found");
         if(personal.cell != personalDTO.cell || personal.name != personalDTO.name || personal.address != personalDTO.address)
             throw new Error("data don't match");
         return await this.personalTrainerRepository.deletePersonal(personal);

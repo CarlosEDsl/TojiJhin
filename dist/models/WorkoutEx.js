@@ -2,18 +2,18 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.WorkoutEx = void 0;
 class WorkoutEx {
-    constructor(id_workout, exerciseId, bench, repetitions, priority) {
+    constructor(workoutId, exerciseId, bench, repetitions, priority) {
         this._exerciseId = exerciseId;
         this._bench = bench;
         this._repetitions = repetitions;
-        this._id_workout = id_workout;
+        this._workoutId = workoutId;
         this._priority = priority;
     }
-    get exercise() {
+    get exerciseId() {
         return this._exerciseId;
     }
-    set exercise(value) {
-        this._exerciseId = this.exercise;
+    set exerciseId(value) {
+        this._exerciseId = this.exerciseId;
     }
     get priority() {
         return this._priority;
@@ -33,11 +33,11 @@ class WorkoutEx {
     set repetitions(value) {
         this._repetitions = value;
     }
-    get id_workout() {
-        return this._id_workout;
+    get workoutId() {
+        return this._workoutId;
     }
-    set id_workout(value) {
-        this._id_workout = value;
+    set workoutId(value) {
+        this._workoutId = value;
     }
 }
 exports.WorkoutEx = WorkoutEx;

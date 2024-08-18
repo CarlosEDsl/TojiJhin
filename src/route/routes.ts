@@ -22,7 +22,7 @@ const models: TsoaRoute.Models = {
     "WorkoutExDTO": {
         "dataType": "refObject",
         "properties": {
-            "id_workout": {"dataType":"double","required":true},
+            "workoutId": {"dataType":"double","required":true},
             "bench": {"dataType":"double","required":true},
             "repetitions": {"dataType":"string","required":true},
             "priority": {"dataType":"double","required":true},
@@ -202,9 +202,9 @@ export function RegisterRoutes(app: Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/workout-ex',
             ...(fetchMiddlewares<RequestHandler>(WorkoutExController)),
-            ...(fetchMiddlewares<RequestHandler>(WorkoutExController.prototype.getExercisesFromWorkout)),
+            ...(fetchMiddlewares<RequestHandler>(WorkoutExController.prototype.findExercise)),
 
-            async function WorkoutExController_getExercisesFromWorkout(request: ExRequest, response: ExResponse, next: any) {
+            async function WorkoutExController_findExercise(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     workoutId: {"in":"query","name":"workoutId","required":true,"dataType":"double"},
                     exerciseId: {"in":"query","name":"exerciseId","required":true,"dataType":"double"},
@@ -221,7 +221,39 @@ export function RegisterRoutes(app: Router) {
                 const controller = new WorkoutExController();
 
               await templateService.apiHandler({
-                methodName: 'getExercisesFromWorkout',
+                methodName: 'findExercise',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/workout-ex/workout/:workoutId',
+            ...(fetchMiddlewares<RequestHandler>(WorkoutExController)),
+            ...(fetchMiddlewares<RequestHandler>(WorkoutExController.prototype.getExercisesByWorkout)),
+
+            async function WorkoutExController_getExercisesByWorkout(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    workoutId: {"in":"path","name":"workoutId","required":true,"dataType":"double"},
+                    success: {"in":"res","name":"200","required":true,"ref":"BasicResponseDto"},
+                    fail: {"in":"res","name":"404","required":true,"ref":"BasicResponseDto"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new WorkoutExController();
+
+              await templateService.apiHandler({
+                methodName: 'getExercisesByWorkout',
                 controller,
                 response,
                 next,

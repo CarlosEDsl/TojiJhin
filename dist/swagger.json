@@ -9,7 +9,7 @@
 		"schemas": {
 			"WorkoutExDTO": {
 				"properties": {
-					"id_workout": {
+					"workoutId": {
 						"type": "number",
 						"format": "double"
 					},
@@ -30,7 +30,7 @@
 					}
 				},
 				"required": [
-					"id_workout",
+					"workoutId",
 					"bench",
 					"repetitions",
 					"priority",
@@ -305,7 +305,7 @@
 				}
 			},
 			"get": {
-				"operationId": "GetExercisesFromWorkout",
+				"operationId": "FindExercise",
 				"responses": {
 					"200": {
 						"description": "",
@@ -348,6 +348,51 @@
 					{
 						"in": "query",
 						"name": "exerciseId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/workout-ex/workout/{workoutId}": {
+			"get": {
+				"operationId": "GetExercisesByWorkout",
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BasicResponseDto"
+								}
+							}
+						}
+					},
+					"204": {
+						"description": "No content"
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BasicResponseDto"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"WorkoutEx"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "workoutId",
 						"required": true,
 						"schema": {
 							"format": "double",

@@ -45,14 +45,14 @@ class TraineeRepository {
             const query = "INSERT INTO tojiJhin.trainee (name, age, address, cell, description) VALUES (?, ?, ?, ?, ?)";
             try {
                 const resultado = yield (0, mysql_1.executarComandoSQL)(query, [trainee.name, trainee.age, trainee.address, trainee.cell, trainee.description]);
-                console.log('Professor adicionado com sucesso, ID: ', resultado.insertId);
+                console.log('Aluno adicionado com sucesso, ID: ', resultado.insertId);
                 trainee.id = resultado.insertId;
                 return new Promise((resolve) => {
                     resolve(trainee);
                 });
             }
             catch (err) {
-                console.error('Erro ao adicionar professor:', err);
+                console.error('Erro ao adicionar aluno:', err);
                 throw err;
             }
         });
@@ -107,16 +107,16 @@ class TraineeRepository {
     }
     filterTraineeByCell(cell) {
         return __awaiter(this, void 0, void 0, function* () {
-            const query = "SELECT * FROM tojiJhin.trainee where cell = ?";
+            const query = "SELECT * FROM tojiJhin.trainee WHERE cell = ?";
             try {
                 const resultado = yield (0, mysql_1.executarComandoSQL)(query, [cell]);
-                console.log('Professor localizado com sucesso, ID: ', resultado);
+                console.log('Aluno localizado com sucesso, ID: ', resultado);
                 return new Promise((resolve) => {
                     resolve(resultado[0]);
                 });
             }
             catch (err) {
-                console.error(`Falha ao procurar o Professor de ID ${cell} gerando o erro: ${err}`);
+                console.error(`Falha ao procurar o Aluno de ID ${cell} gerando o erro: ${err}`);
                 throw err;
             }
         });
