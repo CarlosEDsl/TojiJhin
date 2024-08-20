@@ -32,8 +32,11 @@ class ExerciseService {
         return __awaiter(this, void 0, void 0, function* () {
             const exercise = yield this.dtoToExercise(exerciseDTO);
             exercise.id = exerciseDTO.id || 0;
+            const oldExercise = yield this.exerciseRepository.filterExercise(exercise.id);
+            if (!oldExercise)
+                throw new Error("exercise not found");
             try {
-                if (exercise.name != (yield this.exerciseRepository.filterExercise(exercise.id)).name)
+                if (exercise.name != oldExercise.name)
                     yield this.nameVerify(exercise.name);
             }
             catch (err) {

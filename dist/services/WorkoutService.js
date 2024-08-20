@@ -37,6 +37,10 @@ class WorkoutService {
     editWorkout(workoutDTO) {
         return __awaiter(this, void 0, void 0, function* () {
             const workout = yield this.dtoToWorkout(workoutDTO);
+            workout.id = workoutDTO.id || 0;
+            const oldWorkout = yield this.workoutRepository.filterWorkout(workout.id);
+            if (!oldWorkout)
+                throw new Error("workout not found");
             try {
                 this.foreignVerify(workout);
             }

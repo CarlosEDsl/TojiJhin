@@ -31,7 +31,9 @@ class WorkoutRepository {
             finishDate DATE,
             description VARCHAR(255) NOT NULL,
             id_trainee INT NOT NULL,
-            id_personal INT NOT NULL
+            id_personal INT NOT NULL,
+            FOREIGN KEY (id_trainee) REFERENCES tojiJhin.trainee(id),
+            FOREIGN KEY (id_personal) REFERENCES tojiJhin.personalTrainer(id)
         )`;
             try {
                 const result = yield (0, mysql_1.executarComandoSQL)(query, []);

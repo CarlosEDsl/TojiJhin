@@ -32,6 +32,8 @@ class PersonalTrainerService {
         return __awaiter(this, void 0, void 0, function* () {
             const personal = yield this.dtoToPersonal(personalDTO);
             personal.id = personalDTO.id || 0;
+            if (yield this.personalTrainerRepository.filterPersonalById(personal.id))
+                throw new Error("personal not found");
             if (personal.cell != (yield this.personalTrainerRepository.filterPersonalById(personal.id)).cell) {
                 try {
                     yield this.verifyCell(personal.cell);
@@ -46,6 +48,8 @@ class PersonalTrainerService {
     deletePersonal(personalDTO) {
         return __awaiter(this, void 0, void 0, function* () {
             const personal = yield this.personalTrainerRepository.filterPersonalById(personalDTO.id || 0);
+            if (!personal)
+                throw new Error("personal not found");
             if (personal.cell != personalDTO.cell || personal.name != personalDTO.name || personal.address != personalDTO.address)
                 throw new Error("data don't match");
             return yield this.personalTrainerRepository.deletePersonal(personal);
