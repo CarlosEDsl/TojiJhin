@@ -25,7 +25,12 @@ class TraineeService {
             catch (err) {
                 throw err;
             }
-            return yield this.traineeRepository.insertTrainee(trainee);
+            try {
+                return yield this.traineeRepository.insertTrainee(trainee);
+            }
+            catch (err) {
+                throw err;
+            }
         });
     }
     editTrainee(traineeDTO) {
@@ -41,7 +46,12 @@ class TraineeService {
             catch (err) {
                 throw err;
             }
-            return this.traineeRepository.updateTrainee(trainee);
+            try {
+                return this.traineeRepository.updateTrainee(trainee);
+            }
+            catch (err) {
+                throw err;
+            }
         });
     }
     deleteTrainee(traineeDTO) {
@@ -52,7 +62,12 @@ class TraineeService {
             if (trainee.name != traineeDTO.name || trainee.cell != traineeDTO.cell || trainee.age != traineeDTO.age
                 || trainee.address != traineeDTO.address || trainee.description != traineeDTO.description)
                 throw new Error("data don't match");
-            return this.traineeRepository.deleteTrainee(trainee);
+            try {
+                return this.traineeRepository.deleteTrainee(trainee);
+            }
+            catch (err) {
+                throw err;
+            }
         });
     }
     findTrainee(id) {
@@ -65,7 +80,12 @@ class TraineeService {
     }
     getAllTrainee() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.traineeRepository.filterAllTrainee();
+            try {
+                return yield this.traineeRepository.filterAllTrainee();
+            }
+            catch (err) {
+                throw err;
+            }
         });
     }
     verifyCell(cell) {

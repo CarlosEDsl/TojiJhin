@@ -21,7 +21,11 @@ export class WorkoutService {
         } catch(err) {
             throw err;
         }
-        return await this.workoutRepository.insertWorkout(workout);
+        try {
+            return await this.workoutRepository.insertWorkout(workout);
+        } catch(err) {
+            throw err;
+        }
     }
 
     async editWorkout(workoutDTO:WorkoutDTO) {
@@ -37,7 +41,11 @@ export class WorkoutService {
         } catch(err) {
             throw err;
         }
-        return await this.workoutRepository.updateWorkout(workout);
+        try {
+            return await this.workoutRepository.updateWorkout(workout);
+        } catch(err) {
+            throw err;
+        }
     }
 
     async deleteWorkout(workoutDTO:WorkoutDTO) {
@@ -51,7 +59,11 @@ export class WorkoutService {
         )
             throw new Error("Data don't match");
             
-        await this.workoutRepository.deleteWorkout(workout);
+        try {
+                await this.workoutRepository.deleteWorkout(workout);
+        } catch(err) {
+            throw err;
+        }
     }
 
     async findWorkout(id:number) {
@@ -62,15 +74,27 @@ export class WorkoutService {
     }
 
     async getAllWorkoutFromTrainee(id:number) {
-        return await this.workoutRepository.filterAllWorkoutsFromTrainee(id);
+        try {
+            return await this.workoutRepository.filterAllWorkoutsFromTrainee(id);
+        } catch(err) {
+            throw err;
+        }
     }
 
     async getAllWorkoutFromPersonal(id:number) {
-        return await this.workoutRepository.filterAllWorkoutsFromPersonal(id);
+        try {
+            return await this.workoutRepository.filterAllWorkoutsFromPersonal(id);
+        } catch(err) {
+            throw err;
+        }
     }
 
     async getAllWorkout() {
-        return await this.workoutRepository.filterAllWorkouts();
+        try {
+            return await this.workoutRepository.filterAllWorkouts();
+        } catch(err) {
+            throw err;
+        }
     }
 
     async getExercises(workoutId:number) {

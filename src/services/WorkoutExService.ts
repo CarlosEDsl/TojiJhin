@@ -20,7 +20,11 @@ export class WorkoutExService {
         } catch(err) {
             throw err;
         }
-        return await this.workoutExRepository.insertWorkoutEx(workoutEx);
+        try {
+            return await this.workoutExRepository.insertWorkoutEx(workoutEx);
+        } catch(err) {
+            throw err;
+        }
     }
 
     async editWorkoutEx(workoutExDTO:WorkoutExDTO) {
@@ -30,7 +34,11 @@ export class WorkoutExService {
             throw new Error("Not found");
         }
 
-        return await this.workoutExRepository.updateWorkoutEx(workoutEx);
+        try {
+            return await this.workoutExRepository.updateWorkoutEx(workoutEx);
+        } catch(err) {
+            throw err;
+        }
     }
 
     async deleteWorkoutEx(workoutExDTO:WorkoutExDTO) {
@@ -42,7 +50,11 @@ export class WorkoutExService {
         if(workoutEx.priority != workoutExDTO.priority || workoutEx.bench != workoutExDTO.bench || workoutEx.repetitions != workoutExDTO.repetitions)
             throw new Error("data don't match");
         
-        await this.workoutExRepository.deleteWorkoutEx(workoutEx);
+        try {
+            await this.workoutExRepository.deleteWorkoutEx(workoutEx);
+        } catch(err) {
+            throw err;
+        }
     }
 
     async getWorkoutEx(workoutId:number, exerciseId:number) {
@@ -56,7 +68,11 @@ export class WorkoutExService {
     }
 
     async getWorkoutAllEx(workoutId:number) {
-        return await this.workoutExRepository.filterWorkoutExFromWorkout(workoutId);
+        try {
+            return await this.workoutExRepository.filterWorkoutExFromWorkout(workoutId);
+        } catch(err) {
+            throw err;
+        }
     }
 
     private async workoutVerify(workoutEx:WorkoutEx) {

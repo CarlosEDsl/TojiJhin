@@ -31,7 +31,12 @@ class WorkoutExService {
             catch (err) {
                 throw err;
             }
-            return yield this.workoutExRepository.insertWorkoutEx(workoutEx);
+            try {
+                return yield this.workoutExRepository.insertWorkoutEx(workoutEx);
+            }
+            catch (err) {
+                throw err;
+            }
         });
     }
     editWorkoutEx(workoutExDTO) {
@@ -41,7 +46,12 @@ class WorkoutExService {
             if (!oldWorkoutEx) {
                 throw new Error("Not found");
             }
-            return yield this.workoutExRepository.updateWorkoutEx(workoutEx);
+            try {
+                return yield this.workoutExRepository.updateWorkoutEx(workoutEx);
+            }
+            catch (err) {
+                throw err;
+            }
         });
     }
     deleteWorkoutEx(workoutExDTO) {
@@ -51,7 +61,12 @@ class WorkoutExService {
                 throw new Error("Not found");
             if (workoutEx.priority != workoutExDTO.priority || workoutEx.bench != workoutExDTO.bench || workoutEx.repetitions != workoutExDTO.repetitions)
                 throw new Error("data don't match");
-            yield this.workoutExRepository.deleteWorkoutEx(workoutEx);
+            try {
+                yield this.workoutExRepository.deleteWorkoutEx(workoutEx);
+            }
+            catch (err) {
+                throw err;
+            }
         });
     }
     getWorkoutEx(workoutId, exerciseId) {
@@ -65,7 +80,12 @@ class WorkoutExService {
     }
     getWorkoutAllEx(workoutId) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.workoutExRepository.filterWorkoutExFromWorkout(workoutId);
+            try {
+                return yield this.workoutExRepository.filterWorkoutExFromWorkout(workoutId);
+            }
+            catch (err) {
+                throw err;
+            }
         });
     }
     workoutVerify(workoutEx) {

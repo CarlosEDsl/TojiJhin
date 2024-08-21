@@ -15,7 +15,11 @@ export class TraineeService {
             throw err;
         }
 
-        return await this.traineeRepository.insertTrainee(trainee);
+        try {
+            return await this.traineeRepository.insertTrainee(trainee);
+        } catch(err) {
+            throw err;
+        }
     }
 
     async editTrainee(traineeDTO:TraineeDTO) {
@@ -29,7 +33,11 @@ export class TraineeService {
         } catch(err) {
             throw err;
         }
-        return this.traineeRepository.updateTrainee(trainee);
+        try {
+            return this.traineeRepository.updateTrainee(trainee);
+        } catch(err) {
+            throw err;
+        }
     }
 
     async deleteTrainee(traineeDTO:TraineeDTO) {
@@ -42,7 +50,11 @@ export class TraineeService {
             || trainee.address != traineeDTO.address || trainee.description != traineeDTO.description)
             throw new Error("data don't match");
 
-        return this.traineeRepository.deleteTrainee(trainee);
+        try {        
+                return this.traineeRepository.deleteTrainee(trainee);
+        } catch(err) {
+            throw err;
+        }
     }
 
     async findTrainee(id:number) {
@@ -53,7 +65,11 @@ export class TraineeService {
     }
 
     async getAllTrainee(){
-        return await this.traineeRepository.filterAllTrainee();
+        try {
+            return await this.traineeRepository.filterAllTrainee();
+        } catch(err) {
+            throw err;
+        }
     }
     
     private async verifyCell(cell:number) {

@@ -13,8 +13,11 @@ export class ExerciseService {
         } catch(err){
             throw err;
         }
-
-        return await this.exerciseRepository.insertExercise(exercise);
+        try {
+            return await this.exerciseRepository.insertExercise(exercise);
+        } catch(err) {
+            throw err;
+        }
     }
 
     async editExercise(exerciseDTO:ExerciseDTO) {
@@ -30,7 +33,11 @@ export class ExerciseService {
             throw err;
         }
 
-        return await this.exerciseRepository.updateExercise(exercise);
+        try {
+            return await this.exerciseRepository.updateExercise(exercise);
+        } catch(err) {
+            throw err;
+        }
     }
 
     async deleteExercise(exerciseDTO: ExerciseDTO) {
@@ -40,7 +47,11 @@ export class ExerciseService {
         if(exercise.name != exerciseDTO.name || exercise.description != exerciseDTO.description) {
             throw new Error("data don't match with id");
         }
-        return await this.exerciseRepository.deleteExercise(exercise);
+        try {
+            return await this.exerciseRepository.deleteExercise(exercise);
+        } catch(err) {
+            throw err;
+        }
     }
 
     async findExercise(id:number) {
@@ -51,7 +62,11 @@ export class ExerciseService {
     }
 
     async getAllExercise() {
-        return await this.exerciseRepository.filterAllExercise();
+        try {
+            return await this.exerciseRepository.filterAllExercise();
+        } catch(err) {
+            throw err;
+        }
     }
 
     private async nameVerify(name:string) {

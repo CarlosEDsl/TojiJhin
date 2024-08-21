@@ -25,14 +25,19 @@ class PersonalTrainerService {
             catch (err) {
                 throw err;
             }
-            return this.personalTrainerRepository.insertPersonal(personal);
+            try {
+                return this.personalTrainerRepository.insertPersonal(personal);
+            }
+            catch (err) {
+                throw err;
+            }
         });
     }
     editPersonal(personalDTO) {
         return __awaiter(this, void 0, void 0, function* () {
             const personal = yield this.dtoToPersonal(personalDTO);
             personal.id = personalDTO.id || 0;
-            if (yield this.personalTrainerRepository.filterPersonalById(personal.id))
+            if (!(yield this.personalTrainerRepository.filterPersonalById(personal.id)))
                 throw new Error("personal not found");
             if (personal.cell != (yield this.personalTrainerRepository.filterPersonalById(personal.id)).cell) {
                 try {
@@ -42,7 +47,12 @@ class PersonalTrainerService {
                     throw err;
                 }
             }
-            return this.personalTrainerRepository.updatePersonal(personal);
+            try {
+                return this.personalTrainerRepository.updatePersonal(personal);
+            }
+            catch (err) {
+                throw err;
+            }
         });
     }
     deletePersonal(personalDTO) {
@@ -52,7 +62,12 @@ class PersonalTrainerService {
                 throw new Error("personal not found");
             if (personal.cell != personalDTO.cell || personal.name != personalDTO.name || personal.address != personalDTO.address)
                 throw new Error("data don't match");
-            return yield this.personalTrainerRepository.deletePersonal(personal);
+            try {
+                return yield this.personalTrainerRepository.deletePersonal(personal);
+            }
+            catch (err) {
+                throw err;
+            }
         });
     }
     findPersonal(id) {
@@ -65,7 +80,12 @@ class PersonalTrainerService {
     }
     getAllPersonal() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.personalTrainerRepository.filterAllPersonal();
+            try {
+                return yield this.personalTrainerRepository.filterAllPersonal();
+            }
+            catch (err) {
+                throw err;
+            }
         });
     }
     verifyCell(cell) {

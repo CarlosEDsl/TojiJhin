@@ -31,7 +31,12 @@ class WorkoutService {
             catch (err) {
                 throw err;
             }
-            return yield this.workoutRepository.insertWorkout(workout);
+            try {
+                return yield this.workoutRepository.insertWorkout(workout);
+            }
+            catch (err) {
+                throw err;
+            }
         });
     }
     editWorkout(workoutDTO) {
@@ -47,7 +52,12 @@ class WorkoutService {
             catch (err) {
                 throw err;
             }
-            return yield this.workoutRepository.updateWorkout(workout);
+            try {
+                return yield this.workoutRepository.updateWorkout(workout);
+            }
+            catch (err) {
+                throw err;
+            }
         });
     }
     deleteWorkout(workoutDTO) {
@@ -60,7 +70,12 @@ class WorkoutService {
                 || ((_a = workout.finishDate) === null || _a === void 0 ? void 0 : _a.getTime()) != ((_b = workoutDTO.finishDate) === null || _b === void 0 ? void 0 : _b.getTime()) || workout.description != workoutDTO.description
                 || workout.name != workoutDTO.name)
                 throw new Error("Data don't match");
-            yield this.workoutRepository.deleteWorkout(workout);
+            try {
+                yield this.workoutRepository.deleteWorkout(workout);
+            }
+            catch (err) {
+                throw err;
+            }
         });
     }
     findWorkout(id) {
@@ -73,17 +88,32 @@ class WorkoutService {
     }
     getAllWorkoutFromTrainee(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.workoutRepository.filterAllWorkoutsFromTrainee(id);
+            try {
+                return yield this.workoutRepository.filterAllWorkoutsFromTrainee(id);
+            }
+            catch (err) {
+                throw err;
+            }
         });
     }
     getAllWorkoutFromPersonal(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.workoutRepository.filterAllWorkoutsFromPersonal(id);
+            try {
+                return yield this.workoutRepository.filterAllWorkoutsFromPersonal(id);
+            }
+            catch (err) {
+                throw err;
+            }
         });
     }
     getAllWorkout() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.workoutRepository.filterAllWorkouts();
+            try {
+                return yield this.workoutRepository.filterAllWorkouts();
+            }
+            catch (err) {
+                throw err;
+            }
         });
     }
     getExercises(workoutId) {

@@ -61,9 +61,7 @@ class PersonalTrainerRepository {
             try {
                 const resultado = yield (0, mysql_1.executarComandoSQL)(query, [personaltrainer.name, personaltrainer.address, personaltrainer.cell, personaltrainer.id]);
                 console.log('Professor atualizado com sucesso, ID: ', resultado);
-                return new Promise((resolve) => {
-                    resolve(personaltrainer);
-                });
+                return personaltrainer;
             }
             catch (err) {
                 console.error(`Erro ao atualizar o Professor de ID ${personaltrainer.id} gerando o erro: ${err}`);

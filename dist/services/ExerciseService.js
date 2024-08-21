@@ -25,7 +25,12 @@ class ExerciseService {
             catch (err) {
                 throw err;
             }
-            return yield this.exerciseRepository.insertExercise(exercise);
+            try {
+                return yield this.exerciseRepository.insertExercise(exercise);
+            }
+            catch (err) {
+                throw err;
+            }
         });
     }
     editExercise(exerciseDTO) {
@@ -42,7 +47,12 @@ class ExerciseService {
             catch (err) {
                 throw err;
             }
-            return yield this.exerciseRepository.updateExercise(exercise);
+            try {
+                return yield this.exerciseRepository.updateExercise(exercise);
+            }
+            catch (err) {
+                throw err;
+            }
         });
     }
     deleteExercise(exerciseDTO) {
@@ -53,7 +63,12 @@ class ExerciseService {
             if (exercise.name != exerciseDTO.name || exercise.description != exerciseDTO.description) {
                 throw new Error("data don't match with id");
             }
-            return yield this.exerciseRepository.deleteExercise(exercise);
+            try {
+                return yield this.exerciseRepository.deleteExercise(exercise);
+            }
+            catch (err) {
+                throw err;
+            }
         });
     }
     findExercise(id) {
@@ -66,7 +81,12 @@ class ExerciseService {
     }
     getAllExercise() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.exerciseRepository.filterAllExercise();
+            try {
+                return yield this.exerciseRepository.filterAllExercise();
+            }
+            catch (err) {
+                throw err;
+            }
         });
     }
     nameVerify(name) {

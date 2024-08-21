@@ -14,14 +14,18 @@ export class PersonalTrainerService {
             throw err;
         }
 
-        return this.personalTrainerRepository.insertPersonal(personal);
+        try {
+            return this.personalTrainerRepository.insertPersonal(personal);
+        } catch(err) {
+            throw err;
+        }
     }
 
     async editPersonal(personalDTO:PersonalTrainerDTO) {
         const personal = await this.dtoToPersonal(personalDTO);
-        personal.id = personalDTO.id || 0;
+        personal.id = personalDTO.id || 0;  
 
-        if(await this.personalTrainerRepository.filterPersonalById(personal.id))
+        if(!await this.personalTrainerRepository.filterPersonalById(personal.id))
             throw new Error("personal not found");
 
         if(personal.cell != (await this.personalTrainerRepository.filterPersonalById(personal.id)).cell) {
@@ -31,7 +35,12 @@ export class PersonalTrainerService {
                 throw err;
             }
         }
-        return this.personalTrainerRepository.updatePersonal(personal);
+
+        try {
+            return this.personalTrainerRepository.updatePersonal(personal);
+        } catch(err) {
+            throw err;
+        }
     }
 
     async deletePersonal(personalDTO:PersonalTrainerDTO) {
@@ -40,7 +49,11 @@ export class PersonalTrainerService {
             throw new Error("personal not found");
         if(personal.cell != personalDTO.cell || personal.name != personalDTO.name || personal.address != personalDTO.address)
             throw new Error("data don't match");
-        return await this.personalTrainerRepository.deletePersonal(personal);
+        try {
+            return await this.personalTrainerRepository.deletePersonal(personal);
+        } catch(err) {
+            throw err;
+        }
     }
 
     async findPersonal(id:number) {
@@ -51,7 +64,11 @@ export class PersonalTrainerService {
     }
 
     async getAllPersonal() {
-        return await this.personalTrainerRepository.filterAllPersonal();
+        try {
+            return await this.personalTrainerRepository.filterAllPersonal();
+        } catch(err) {
+            throw err;
+        }
     }
 
     private async verifyCell(cell:number) {

@@ -54,9 +54,7 @@ export class PersonalTrainerRepository{
         try {
             const resultado = await executarComandoSQL(query, [personaltrainer.name, personaltrainer.address, personaltrainer.cell, personaltrainer.id]);
             console.log('Professor atualizado com sucesso, ID: ', resultado);
-            return new Promise<PersonalTrainer>((resolve)=>{
-                resolve(personaltrainer);
-            })
+            return personaltrainer;
         } catch (err:any) {
             console.error(`Erro ao atualizar o Professor de ID ${personaltrainer.id} gerando o erro: ${err}`);
             throw err;
